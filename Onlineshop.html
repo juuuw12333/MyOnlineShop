@@ -1,0 +1,162 @@
+<html>
+<head>
+<title>Simple Online Shop</title>
+<style>
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; }
+    header { background-color: black; color: white; text-align: center; padding: 20px; }
+    header button { background: white; color: black; border: none; padding: 8px 15px; margin: 0 5px; cursor: pointer; border-radius: 5px; }
+    main { padding: 20px; min-height: 300px; }
+    .cart { position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: white; box-shadow: -2px 0 5px rgba(0,0,0,0.3); padding: 20px; transition: right 0.3s ease; z-index: 1000; overflow-y: auto; }
+    .cart.open { right: 0; }
+    .cart h2 { margin-top: 0; }
+    .cart-item { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+    .cart button { background: red; color: white; border: none; padding: 5px; cursor: pointer; border-radius: 3px; }
+    .cart-toggle { position: fixed; top: 20px; right: 20px; background: orange; border: none; padding: 8px 12px; cursor: pointer; border-radius: 5px; z-index: 1100; }
+    .product { border: 1px solid #ddd; padding: 15px; margin-top: 20px; max-width: 300px; text-align: center; border-radius: 5px; }
+    .product img { width: 100%; border-radius: 5px; }
+    .product button { margin-top: 10px; padding: 8px 12px; border: none; cursor: pointer; border-radius: 5px; }
+    .add-btn { background: green; color: white; }
+    .buy-btn { background: blue; color: white; }
+</style>
+</head>
+<body>
+    <header>
+        <h1>My Gaming Online Shop</h1>
+        <button>Home</button>
+        <a href="aboutus.html" target="_blank"><button>About Us</button></a>
+        <a href="mailto:Juuuw1233@gmail.com"><button>Email Us</button></a>
+    </header>
+
+    <main>
+        <center>
+<marquee>
+            <p>Enjoy Shopping!</p>
+            <img src="logo.jpg" style="height:100px;">
+</marquee>
+        </center>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: stretch;">
+            <!-- Product 1 -->
+            <div class="product">
+                <img src="Razer Blackwidow1.webp" alt="Razer Blackwidow" style="height:200px; object-fit: contain;">
+                <h3>Razer Blackwidow</h3>
+                <p>₱10,000</p>
+                <button class="add-btn" onclick="addToCart('Razer Blackwidow', 10000)">Add to Cart</button>
+                <button class="buy-btn" onclick="buyNow('Razer Blackwidow', 10000)">Buy Now</button>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product">
+                <img src="AULA F75.webp" alt="AULA F75" style="height:200px; object-fit: contain;">
+                <h3>AULA F75</h3>
+                <p>₱20,000</p>
+                <button class="add-btn" onclick="addToCart('AULA F75', 20000)">Add to Cart</button>
+                <button class="buy-btn" onclick="buyNow('AULA F75', 20000)">Buy Now</button>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product">
+                <img src="RK Royal Kludge.webp" alt="RK Royal Kludge" style="height:200px; object-fit: contain;">
+                <h3>RK Royal Kludge</h3>
+                <p>₱15,000</p>
+                <button class="add-btn" onclick="addToCart('RK Royal Kludge', 15000)">Add to Cart</button>
+                <button class="buy-btn" onclick="buyNow('RK Royal Kludge', 15000)">Buy Now</button>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product">
+                <img src="NuPhy Air96.webp" alt="NuPhy Air96" style="height:200px; object-fit: contain;">
+                <h3>NuPhy Air96</h3>
+                <p>₱12,000</p>
+                <button class="add-btn" onclick="addToCart('NuPhy Air96', 12000)">Add to Cart</button>
+                <button class="buy-btn" onclick="buyNow('NuPhy Air96', 12000)">Buy Now</button>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product">
+                <img src="Redragon K655.webp" alt="Redragon K655" style="height:200px; object-fit: contain;">
+                <h3>Redragon K655</h3>
+                <p>₱13,000</p>
+                <button class="add-btn" onclick="addToCart('Redragon K655', 13000)">Add to Cart</button>
+                <button class="buy-btn" onclick="buyNow('Redragon K655', 13000)">Buy Now</button>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product">
+                <img src="Redragon DEVARAJAS.webp" alt="Redragon DEVARAJAS" style="height:200px; object-fit: contain;">
+                <h3>Redragon DEVARAJAS</h3>
+                <p>₱11,000</p>
+                <button class="add-btn" onclick="addToCart('Redragon DEVARAJAS', 11000)">Add to Cart</button>
+                <button class="buy-btn" onclick="buyNow('Redragon DEVARAJAS', 11000)">Buy Now</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Cart Panel -->
+    <button class="cart-toggle" onclick="toggleCart()">🛍️ Your bag</button>
+    <div class="cart" id="cart">
+<marquee>
+        <h2> 🛍️ Your Bag</h2>
+        <div id="cart-items"></div>
+        <h3>Total: ₱<span id="cart-total">0</span></h3>
+        <button onclick="clearCart()">Clear order</button>
+        <button style="background: black; color: white; margin-top: 10px;" onclick="buyCartItems()">Buy All</button>
+</marquee>
+    </div>
+
+    <script>
+        let cart = [];
+        let total = 0;
+
+        function toggleCart() {
+            document.getElementById("cart").classList.toggle("open");
+        }
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            total += price;
+            updateCart();
+            alert(name + " added to cart!");
+        }
+
+        function updateCart() {
+            const cartItemsDiv = document.getElementById("cart-items");
+            cartItemsDiv.innerHTML = "";
+            cart.forEach((item, index) => {
+                cartItemsDiv.innerHTML += `
+                    <div class="cart-item">
+                        <span>${item.name} - ₱${item.price}</span>
+                        <button onclick="removeFromCart(${index})">X</button>
+                    </div>
+                `;
+            });
+            document.getElementById("cart-total").innerText = total;
+        }
+
+        function removeFromCart(index) {
+            total -= cart[index].price;
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function clearCart() {
+            cart = [];
+            total = 0;
+            updateCart();
+        }
+
+        function buyNow(name, price) {
+            alert("You purchased " + name + " for ₱" + price);
+        }
+
+        function buyCartItems() {
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+            alert("You purchased " + cart.length + " item(s) for ₱" + total);
+            clearCart();
+        }
+    </script>
+</body>
+</html>
